@@ -5,6 +5,7 @@ on:
 
 jobs:
   test-docker-compose-whoami:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - run: cd ./docker-compose/whoami && make test
