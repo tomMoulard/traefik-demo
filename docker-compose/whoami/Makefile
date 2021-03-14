@@ -1,3 +1,5 @@
+.PHONY: all up upd down test tests
+
 all: down up
 
 up:
