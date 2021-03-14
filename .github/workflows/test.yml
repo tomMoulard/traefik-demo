@@ -1,0 +1,10 @@
+name: Tests
+
+on:
+  push:
+
+jobs:
+  test-docker-compose-whoami:
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd ./docker-compose/whoami && make test
