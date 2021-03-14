@@ -7,11 +7,18 @@ services:
       - '--api.insecure=true'
       - '--providers.docker'
       - '--log.level=DEBUG'
+      - '--ping=true'
     ports:
       - "80:80"
       - "8080:8080"
+    healthcheck:
+      test: ['CMD', 'traefik', 'healthcheck', '--ping']
+      interval: 10s
+      timeout: 10s
+      retries: 5
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+
   whoami:
     image: traefik/whoamitcp
     labels:
