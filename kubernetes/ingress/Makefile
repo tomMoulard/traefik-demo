@@ -1,9 +1,9 @@
 TRAEFIK_VERSION = "traefik:v2.4"
 K3S_VERSION = "rancher/k3s:v1.20.2-k3s1"
 
-.PHONY: all up def traefik resources stat
+.PHONY: all up def traefik resources stat pull
 
-all: up def traefik resources stat
+all: pull up def traefik resources stat
 
 up:
 	-k3d cluster delete mycluster
@@ -14,6 +14,9 @@ up:
 		-i ${K3S_VERSION}
 	k3d image import ${TRAEFIK_VERSION} -c mycluster
 	k3d image import traefik/whoami:latest -c mycluster
+
+pull:
+	docker pull ${TRAEFIK_VERSION}
 
 def:
 	-kubectl delete -f src/stack/
