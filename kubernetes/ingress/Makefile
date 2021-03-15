@@ -17,6 +17,7 @@ up:
 
 pull:
 	docker pull ${TRAEFIK_VERSION}
+	docker pull traefik/whoami:latest
 
 def:
 	-kubectl delete -f src/stack/
