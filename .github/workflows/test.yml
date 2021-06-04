@@ -14,6 +14,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: cd ./docker-compose/whoamitcp && make test
+  test-docker-compose-dashboard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: cd ./docker-compose/dashboard && make test
   test-kubernetes-ingress:
     runs-on: ubuntu-latest
     steps:

@@ -1,0 +1,22 @@
+version: '3.6'
+
+services:
+  traefik:
+    image: traefik:2.4
+    command:
+      - '--api.dashboard'
+      - '--providers.docker'
+      - '--log.level=DEBUG'
+      - '--ping=true'
+    ports:
+      - "80:80"
+    healthcheck:
+      test: ['CMD', 'traefik', 'healthcheck', '--ping']
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      - "traefik.http.routers.traefik.rule=Host(`traefik.localhost`)"
+      - "traefik.http.routers.traefik.service=api@internal"
