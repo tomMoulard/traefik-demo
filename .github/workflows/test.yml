@@ -26,3 +26,10 @@ jobs:
       - name: Installing k4d
         run: curl -s https://raw.githubusercontent.com/rancher/k3d/main/install.sh | TAG=v3.4.0 bash
       - run: cd ./kubernetes/ingress && make test
+  test-kubernetes-ingressRoute-dashboard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Installing k4d
+        run: curl -s https://raw.githubusercontent.com/rancher/k3d/main/install.sh | TAG=v3.4.0 bash
+      - run: cd ./kubernetes/ingressroute/dashboard && make test
