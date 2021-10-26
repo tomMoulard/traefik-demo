@@ -34,6 +34,7 @@ spec:
           ports:
             - name: web
               containerPort: 80
+          tty: true
 
 ---
 apiVersion: v1
