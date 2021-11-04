@@ -1,0 +1,51 @@
+version: '3.6'
+
+services:
+  traefik:
+    image: traefik:2.5
+    command:
+      - '--api.insecure=true'
+      - '--providers.docker'
+      - '--log.level=DEBUG'
+      - '--ping=true'
+
+      - '--metrics.prometheus=true'
+      - '--metrics.prometheus.addEntryPointsLabels=true'
+      - '--metrics.prometheus.addrouterslabels=true'
+      - '--metrics.prometheus.addServicesLabels=true'
+    ports:
+      - "80:80"
+      - "8080:8080"
+    healthcheck:
+      test: ['CMD', 'traefik', 'healthcheck', '--ping']
+      interval: 10s
+      timeout: 10s
+      retries: 5
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+  prometheus:
+    image: prom/prometheus:v2.31.0
+    command:
+      - '--config.file=/prometheus.yml'
+    depends_on:
+      - traefik
+    volumes:
+      - ./prometheus.yml:/prometheus.yml
+    labels:
+      - "traefik.http.routers.prometheus.rule=Host(`prometheus.localhost`)"
+
+  grafana:
+    image: grafana/grafana:8.2.3
+    depends_on:
+      - prometheus
+    volumes:
+      - ./grafana/provisioning/:/etc/grafana/provisioning/
+    environment:
+      GF_AUTH_ANONYMOUS_ENABLED: true
+      GF_AUTH_BASIC_ENABLED: false
+      GF_METRICS_ENABLED: true
+      GF_SECURITY_ADMIN_PASSWORD: foobar #admin:foobar
+      GF_INSTALL_PLUGINS: grafana-clock-panel,grafana-simple-json-datasource
+    labels:
+      - "traefik.http.routers.grafana.rule=Host(`grafana.localhost`)"
